@@ -162,8 +162,11 @@ Provide evidence of consensus within the community and discuss important objecti
 * Do not talk about history or why this needs to be done - that is part of Motivation section.
 ====
 
-=== Deprecating dangerous permissions vs. removing them
+=== Consolidating "dangerous" permissions
+The permissions that are considered "dangerous" effectively provide the user with the means to grant themselves the "ultimate" permission, `Jenkins.ADMINISTER`, therby making their existence redundant.  Consolidating these permissions into `Jenkins.ADMINISTER` makes it unambiguous as to what a user is or is not permitted to do.
 
+=== Deprecating "dangerous" permissions vs. removing them
+Due to the large number of plugins available for Jenkins, the decision was made to mark these "dangerous" permissions as `@Deprecated` and `@Restricted(NoExternalUse.class)`.  This will allow for backwards compatibility with existing plugins while minimizing any new usages.  This approach will encourage plugin authors to update their code in future releases that depend upon the new Jenkins Core baseline.
 
 == Backwards Compatibility
 
