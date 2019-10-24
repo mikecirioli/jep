@@ -146,6 +146,10 @@ This section may also contain any historical context such as how things were don
 
 The current permission model provides a false sense of security for Jenkins administrators.  The motivation was to allow some users the ability to configure limited aspects of a Jenkins instance without granting them full `Jenkins.ADMINISTRATOR` privelleges, however it is trivial for a motivated user to grant themselves the additional priveleges by means of the groovy console (`Jenkins.RUN_SCRIPTS`), or by means of a malicious plugin (`Jenkins.UPLOAD_PLUGINS`, `Jenkins.CONFIGURE_UPDATECENTER`).
 
+By consolidating all permission types that effectively allow a user to have full `root` access on a Jenkins instance, and introducing a new permission (`Jenkins.CONFIGURE`) that allows a limited amount of access to configure certain non-critical functionality, a Jenkins administrator can safely delegate configuration aspects while being confident that security concerns are being met.
+
+The `Jenkins.CONFIGURE` permission type is not intended to replace any `Item` level permissions.  It is soley for the purpose of sensistive, security related Jenkins configuration settings from those that a non-root administrator might be expected to manage.
+
 == Reasoning
 
 [TIP]
@@ -157,6 +161,9 @@ Provide evidence of consensus within the community and discuss important objecti
 * Use sub-headings to organize this section for ease of readability.
 * Do not talk about history or why this needs to be done - that is part of Motivation section.
 ====
+
+=== Deprecating dangerous permissions vs. removing them
+
 
 == Backwards Compatibility
 
@@ -184,19 +191,7 @@ There are no security risks related to this proposal.
 
 == Infrastructure Requirements
 
-[TIP]
-====
-Describe any impact on the Jenkins project infrastructure.
-
-Include any additions or changes, interactions with existing components,
-potential instabilities, service-level agreements,
-and responsibilities for continuing maintenance.
-Explain the scope of infrastructure changes with sufficient detail
-to allow initial and on-going cost (in both time and money) to be estimated.
-
-If this proposal will have no impact on infrastructure, this section may simply say:
 There are no new infrastructure requirements related to this proposal.
-====
 
 == Testing
 
