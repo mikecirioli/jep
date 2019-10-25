@@ -178,6 +178,7 @@ Describe how the JEP proposes to deal with these incompatibilities.
 If there are no backwards compatibility concerns, this section may simply say:
 There are no backwards compatibility concerns related to this proposal.
 ====
+No existing permission types are being removed at this point, which will allow for existing plugins that make use of them to continue to function.  Removing the "dangerous" permissions is outside the scope of this JEP.
 
 == Security
 
@@ -191,6 +192,7 @@ and detail how the JEP interacts with existing elements in Jenkins, such as perm
 If this proposal will have no impact on security, this section may simply say:
 There are no security risks related to this proposal.
 ====
+The intent of this proposal is to improve overall security for Jenkins instances that are using some form of matrix authorization.  All configuration items that require `Jenkins.ADMINISTER` are being reviewed to determine if they can be changed to require the new `Jenkins.CONFIGURE` permission type.  The greatest risk is that some configuration may be _more restrictive_ than necsarry, either because it was overlooked or due to differences in opinion during the review process.
 
 == Infrastructure Requirements
 
@@ -216,6 +218,7 @@ When will you complete testing relative to merging code changes, and might retes
 If this proposal requires no testing, this section may simply say:
 There are no testing issues related to this proposal.
 ====
+Existing tests that validate permissions, or make assumptions about the permissions being used will be updated to conform to the new permission model.  Additional tests will be written that validate the new permission type can not be used when the more restrictive `Jenkins.ADMINISTER` is needed.
 
 == Prototype Implementation
 
