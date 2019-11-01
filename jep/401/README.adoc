@@ -95,7 +95,7 @@ Give a short (200 word) description of the technical issue addressed.
 ====
 The permission types `Jenkins.RUN_SCRIPTS`, `Jenkins.CONFIGURE_UPDATECENTER`, and `Jenkins.UPLOAD_PLUGINS` provide a false sense of security, as a user is able to escalate this limited privilege to `Jenkins.ADMINISTER`.  These permissions are being marked as `@Deprecated` and are now consolidated as `Jenkins.Administer`.  
 
-A new permission type, `Jenkins.CONFIGURE` (implied by `Jenkins.ADMINISTER`) has been created for actions that allow for the management of Jenkins configuration items that do not require `Jenkins.ADMINISTER`.
+A new permission type, `Jenkins.CONFIGURE` (implied by `Jenkins.ADMINISTER`) has been created for actions that allow for the management of Jenkins configuration items that do not require `Jenkins.ADMINISTER`.  This new perimssion is used to create a clear separation between settings that impact the entirety of a Jenkins instance (particularly with regards to security) and those that can be used to manage other aspects of an installation. 
 
 
 
