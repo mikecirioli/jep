@@ -125,7 +125,7 @@ The following permission types are now marked as `@Deprecated` and `@Restricted(
 
 This allows for backwards compatiblilty with plugins while providing motivation to refactor any usages of the deprecated checks in future releases.
 
-Actions that formerlly checked for these permissions will instead check for `Jenkins.ADMINISTER`.
+Actions that formerly checked for these permissions will instead check for `Jenkins.ADMINISTER`.
 
 All other actions that check for `Jenkins.ADMINISTER` will be evaluated to determine if the use of the new `Jenkins.CONFIGURE` permission type is appropriate.  The general rule of thumb is that actions which do not let you change the underlying security model (either directly, or through a malicious plugin or groovy script), or change fundamental configurations such as hostnames, proxy configuration, etc are likely candidates to use the `Jenkins.CONFIGURE`.
 
@@ -144,11 +144,11 @@ This section may also contain any historical context such as how things were don
 * Do not discuss design choices or alternative designs that were rejected - those belong in the Reasoning section.
 ====
 
-The current permission model provides a false sense of security for Jenkins administrators.  The motivation was to allow some users the ability to configure limited aspects of a Jenkins instance without granting them full `Jenkins.ADMINISTRATOR` privelleges, however it is trivial for a motivated user to grant themselves the additional priveleges by means of the groovy console (`Jenkins.RUN_SCRIPTS`), or by means of a malicious plugin (`Jenkins.UPLOAD_PLUGINS`, `Jenkins.CONFIGURE_UPDATECENTER`).
+The current permission model provides a false sense of security for Jenkins administrators.  The motivation was to allow some users the ability to configure limited aspects of a Jenkins instance without granting them full `Jenkins.ADMINISTRATOR` privileges; however, it is trivial for a motivated user to grant themselves the additional privileges by means of the groovy console (`Jenkins.RUN_SCRIPTS`), or by means of a malicious plugin (`Jenkins.UPLOAD_PLUGINS`, `Jenkins.CONFIGURE_UPDATECENTER`).
 
 By consolidating all permission types that effectively allow a user to have full `root` access on a Jenkins instance, and introducing a new permission (`Jenkins.CONFIGURE`) that allows a limited amount of access to configure certain non-critical functionality, a Jenkins administrator can safely delegate configuration aspects while being confident that security concerns are being met.
 
-The `Jenkins.CONFIGURE` permission type is not intended to replace any `Item` level permissions.  It is soley for the purpose of sensistive, security related Jenkins configuration settings from those that a non-root administrator might be expected to manage.
+The `Jenkins.CONFIGURE` permission type is not intended to replace any `Item` level permissions.  It is solely for the purpose of seperating sensistive, security related Jenkins configuration settings from those that a non-root administrator might be expected to manage.
 
 == Reasoning
 
@@ -163,7 +163,7 @@ Provide evidence of consensus within the community and discuss important objecti
 ====
 
 === Consolidating "dangerous" permissions
-The permissions that are considered "dangerous" effectively provide the user with the means to grant themselves the "ultimate" permission, `Jenkins.ADMINISTER`, therby making their existence redundant.  Consolidating these permissions into `Jenkins.ADMINISTER` makes it unambiguous as to what a user is or is not permitted to do.
+The permissions that are considered "dangerous" effectively provide the user with the means to grant themselves the "ultimate" permission, `Jenkins.ADMINISTER`, thereby making their existence redundant.  Consolidating these permissions into `Jenkins.ADMINISTER` removes ambiguity concerning what a user is or is not permitted to do.
 
 === Deprecating "dangerous" permissions vs. removing them
 Due to the large number of plugins available for Jenkins, the decision was made to mark these "dangerous" permissions as `@Deprecated` and `@Restricted(NoExternalUse.class)`.  This will allow for backwards compatibility with existing plugins while minimizing any new usages.  This approach will encourage plugin authors to update their code in future releases that depend upon the new Jenkins Core baseline.
