@@ -192,7 +192,7 @@ and detail how the JEP interacts with existing elements in Jenkins, such as perm
 If this proposal will have no impact on security, this section may simply say:
 There are no security risks related to this proposal.
 ====
-The intent of this proposal is to improve overall security for Jenkins instances that are using some form of matrix authorization.  All configuration items that require `Jenkins.ADMINISTER` are being reviewed to determine if they can be changed to require the new `Jenkins.CONFIGURE` permission type.  The greatest risk is that some configuration may be _more restrictive_ than necsarry, either because it was overlooked or due to differences in opinion during the review process.
+The intent of this proposal is to improve overall security for Jenkins instances that are using some form of matrix authorization.  All configuration items that require `Jenkins.ADMINISTER` are being reviewed to determine if they can be changed to require the new `Jenkins.CONFIGURE` permission type.  The greatest risk is that some configuration may be _more restrictive_ than necessary, either because it was overlooked or due to differences in opinion during the review process.
 
 == Infrastructure Requirements
 
