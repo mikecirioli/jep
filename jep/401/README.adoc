@@ -218,7 +218,7 @@ When will you complete testing relative to merging code changes, and might retes
 If this proposal requires no testing, this section may simply say:
 There are no testing issues related to this proposal.
 ====
-Existing tests that validate permissions, or make assumptions about the permissions being used will be updated to conform to the new permission model.  Additional tests will be written that validate the new permission type can not be used when the more restrictive `Jenkins.ADMINISTER` is needed.
+Existing tests that validate permissions, or make assumptions about the permissions being used, will be updated to conform to the new permission model.  Additional tests will be written that validate the new permission type cannot be used when the more restrictive `Jenkins.ADMINISTER` is needed.
 
 == Prototype Implementation
 
