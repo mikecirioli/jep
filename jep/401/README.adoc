@@ -125,9 +125,15 @@ The following permission types are now marked as `@Deprecated` and `@Restricted(
 
 This allows for backwards compatiblilty with plugins while providing motivation to refactor any usages of the deprecated checks in future releases.
 
-Actions that formerly checked for these permissions will instead check for `Jenkins.ADMINISTER`.
+Methods that formerly checked for these permissions will instead check for `Jenkins.ADMINISTER`.
 
-All other actions that check for `Jenkins.ADMINISTER` will be evaluated to determine if the use of the new `Jenkins.CONFIGURE` permission type is appropriate.  The general rule of thumb is that actions which do not let you change the underlying security model (either directly, or through a malicious plugin or groovy script), or change fundamental configurations such as hostnames, proxy configuration, etc. are likely candidates to use the `Jenkins.CONFIGURE`.
+All other methods that check for `Jenkins.ADMINISTER` will be evaluated to determine if the use of the new `Jenkins.CONFIGURE` permission type is appropriate.  The general rule of thumb is that configuration item which does not let you change the underlying security model (either directly, or through a malicious plugin or groovy script), or change fundamental configurations such as hostnames, proxy configuration, etc. are likely candidates to use the `Jenkins.CONFIGURE`.
+
+[]
+====
+proviide more detail about what plugins, etc
+====
+
 
 []
 ====
