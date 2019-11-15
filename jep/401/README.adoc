@@ -174,6 +174,55 @@ The permissions that are considered "dangerous" effectively provide the user wit
 === Deprecating "dangerous" permissions vs. removing them
 Due to the large number of plugins available for Jenkins, the decision was made to mark these "dangerous" permissions as `@Deprecated` and `@Restricted(NoExternalUse.class)`.  This will allow for backwards compatibility with existing plugins while minimizing any new usages.  This approach will encourage plugin authors to update their code in future releases that depend upon the new Jenkins Core baseline.
 
+== Open questions
+
+=== Which permissions should Jenkins.CONFIGURE imply
+
+We have considered which other permissions should be implied by `Jenkins.CONFIGURE`
+
+We are hesitating about `Jenkins.READ` (a.k.a `Overall Read`). 
+
+This permission is required to access the web or use the CLI, and is only implied by `Jenkins.ADMINISTER`, which means that currently any other permission allows to access the web, and it has to be given explicitly.
+
+However, it is reasonable for `Jenkins.CONFIGURE`, as a permission of Jenkins/Overall scope, to imply it.
+
+At the same time, the current implementation of `Permission` makes impossible to make `Jenkins.CONFIGURE` imply `Jenkins.READ`, because a permission can not be implied by more than one, and `Jenkins.READ` is already implied by `Permission.READ`
+
+TODO: put the diagram of current state without CONFIGURE
+
+These are the different solutions we are considering:
+
+. `Jenkins.CONFIGURE` is not enough to access the website. 
+	* Pros:
+        ** Same behaviour that with any other permission (except `Jenkins.ADMINISTER`)
+        ** No changes in currently implemented permission.
+	* Cons:
+        ** For a user, seems counterintuitive: `Overall Configure` is not enough to access the website, and they will need to also provide `Overall Read`
+
+. Make `Jenkins.CONFIGURE` to imply `Permission.READ`. 
+	* Pros:
+        ** User doesn’t have to provide “Overall Read” to allow a user with “Overall Configure” to access the website
+	* Cons:
+        ** Security Risk: `Jenkins.CONFIGURE` would allow to see all jobs, views, and any other item in plugins with READ permission implied by `Permission.READ` (credentials?)
+        ** The permission would be less fined grained
+        Some users may want to have a role to configure jenkins, but without the ability to see the jobs executed by jenkins, which can give information about private customers or projects.
+
+. Change the places were Jenkins.READ is required, to also allow Jenkins.CONFIGURE:
+https://github.com/mikecirioli/jenkins/pull/20
+    * Pros:
+        ** User doesn’t have to provide “Overall Read” to allow a user with “Overall Configure” to access the website
+        ** We can choose in more detail what a `Jenkins.CONFIGURE` allows to see, allowing differences with existent READ permissions
+    * Cons:
+        ** This would be introducing a new mechanism to enforce authorization that can lead to an implementation even more difficult to understand and maintain.
+
+. Change Permission class, to allow a permission be implied by more than one, and make Jenkins.READ be implied by Jenkins.CONFIGURE.
+    * Pros:
+        ** User doesn’t have to provide “Overall Read” to allow a user with “Overall Configure” to access the website
+        ** This change in Permission class supports implementing more complex permission schema, which can be useful in the future 
+    * Cons:
+        ** The change can be difficult, specially to avoid breaking compatibility
+
+
 == Backwards Compatibility
 
 [TIP]
