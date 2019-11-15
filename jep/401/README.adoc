@@ -188,7 +188,7 @@ However, it is reasonable for `Jenkins.CONFIGURE`, as a permission of Jenkins/Ov
 
 At the same time, the current implementation of `Permission` makes impossible to make `Jenkins.CONFIGURE` imply `Jenkins.READ`, because a permission can not be implied by more than one, and `Jenkins.READ` is already implied by `Permission.READ`
 
-TODO: put the diagram of current state without CONFIGURE
+image::CONFIGURE-and-READ-permissions.svg[]
 
 These are the different solutions we are considering:
 
