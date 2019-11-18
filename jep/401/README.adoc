@@ -129,9 +129,52 @@ Methods that formerly checked for these permissions will instead check for `Jenk
 
 All other methods that check for `Jenkins.ADMINISTER` will be evaluated to determine if the use of the new `Jenkins.CONFIGURE` permission type is appropriate.  The general rule of thumb is that configuration item which does not let you change the underlying security model (either directly, or through a malicious plugin or groovy script), or change fundamental configurations such as hostnames, proxy configuration, etc. are likely candidates to use the `Jenkins.CONFIGURE`.
 
+Here is a design of the new Permission model. Existing permissions are in Grey and, new deprecations are in Red, and the new permission is in Green.
+
+image::Targetted_permission_model.png[Design of the new permission model.]
+
+=== The new UX for Jenkins
+
+The main change for the new `Jenkins.CONFIGURE_JENKINS` permission is on the manage page. 
+
+We used the `Matrix Authorization` plugin to create two users, each one with only one permission: `Jenkins.ADMINISTER` or `Jenkins.CONFIGURE_JENKINS`.
+
+image::UX_matrix_auth.png[Permissions configuration with matrix authorization plugin.]
+
+See below how we splitted the permissions between `Jenkins.ADMINISTER` and `Jenkins.CONFIGURE_JENKINS`.
+
+image::UX_manage_page.png[User interface for the new permission.]
+
+For most of menu item, they are avalaible for both users or only `Jenkins.ADMINISTER` on the whole. It's a full authorize or not for `Jenkins.CONFIGURE_JENKINS`. The only exception is for (4) "Configure System".
+
+By default, all menu in the "/manage" page required `Jenkins.ADMINISTER`, the links that are authorized for `Jenkins.CONFIGURE_JENKINS` are precised one by one. That means that if a plugin adds some ManagementLink, it will have to override `getRequiredPermission()` to return `Jenkins.CONFIGURE_JENKINS`. For exemple :
+
+```java
+public class CustomLink extends ManagementLink {
+
+    @Override
+    public Permission getRequiredPermission() {
+        return Jenkins.CONFIGURE_JENKINS;
+    }
+}
+```
+Plugin may have to change also permission on jelly files to allow `Jenkins.CONFIGURE_JENKINS` on management links.
+
+First of all (1), system information messages are only for `Jenkins.ADMINISTER`, it's not showed with `Jenkins.CONFIGURE_JENKINS` because this message can contains some button that can lead to sensible modifications. We choose to not show a subset of safe message, because it can lead to an false feeling of well configured Jenkins to the `Jenkins.CONFIGURE_JENKINS`. Some critical message could be only displayed to `Jenkins.ADMINISTER` and a user with `Jenkins.CONFIGURE_JENKINS` can think that everything is fine because nothing is showed but it's not.
+
+User management and security configuration (2) needs `Jenkins.ADMINISTER` because managing user can allow someone to grant himself to `Jenkins.ADMINISTER` and then do anything on Jenkins.
+
+Plugin management (3) also needs `Jenkins.ADMINISTER` to be configured, because plugin can contains security issue and moreover custom plugin could contain intentionnal backdoor. Some right could be interesting for `Jenkins.CONFIGURE_JENKINS` on plugins, like install plugin only from trusted update center. That kind of feature need more design and more work so we authorize `Jenkins.ADMINISTER` only for this feature.
+
+Configure System (4) is the root need of this feature, so we authorized this menu for `Jenkins.CONFIGURE_JENKINS` filtered items that can be configured by `Jenkins.CONFIGURE_JENKINS`.
+
+image::UX_config_tools.png[Configure System details.]
+
+`Global properties` and `# of executor` needs ADMINISTER to be modified.
+
 []
 ====
-proviide more detail about what plugins, etc
+provide more detail about what plugins, etc
 ====
 
 
